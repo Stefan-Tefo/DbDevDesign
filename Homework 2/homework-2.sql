@@ -77,4 +77,4 @@ GROUP BY ar.name, al.name, al.rating;
 -- • List all explicit song names and artist names without missing data
 SELECT ar.name, s.name, s.explicit  FROM artist ar
 JOIN song s ON ar.id = s.artist_id
-WHERE s.explicit = true
+WHERE s.explicit = true;
