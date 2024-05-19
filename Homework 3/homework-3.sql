@@ -1,0 +1,11 @@
+-- • Calculate the count of all songs in the system
+-- • Calculate the count of all songs per artist in the system
+-- • Calculate the count of all songs per artist in the system for first 100 albums (ID < 100)
+-- • Find the maximal duration and the average duration per song for each artist
+-- • Calculate the count of all songs per artist in the system and filter only song count greater than 10
+-- • Calculate the count of all songs per artist in the system for first 100 albums (ID < 100) and filter artists with more than 10 song count
+-- • Find the song count, maximal duration, and the average duration per artist on all songs in the system. Filter only records where maximal duration is more than the average duration
+-- • Create a new view (vw_ArtistSongCounts) that will list all artist IDs and count of songs per artist
+-- • Change the view to show artist names instead of artist ID
+-- • List all rows from the view ordered by the biggest song count
+-- • Create a new view (vw_ArtistAlbumDetails) that will list all artists (name) and count the albums they have
