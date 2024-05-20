@@ -1,29 +1,28 @@
 -- • Calculate rating of album by artist
-SELECT ar.name as artist_name, al.name as album_name, COUNT(al.rating) FROM artist ar
-LEFT JOIN song s ON ar.id = s.artist_id
-LEFT JOIN album al ON al.id = s.album_id
-GROUP BY ar.name, al.name;
+	SELECT ar.name as artist_name, al.name as album_name, COUNT(al.rating) FROM artist ar
+	LEFT JOIN song s ON ar.id = s.artist_id
+	LEFT JOIN album al ON al.id = s.album_id
+	GROUP BY ar.name, al.name;
 -- • Get longest song by genre
-SELECT g.name,MAX(s.duration) FROM song s
-JOIN songs_genres sg ON s.id = sg.song_id
-LEFT JOIN genre g ON g.id = sg.genre_id
-GROUP BY g.name;
+	SELECT g.name,MAX(s.duration) FROM song s
+	JOIN songs_genres sg ON s.id = sg.song_id
+	LEFT JOIN genre g ON g.id = sg.genre_id
+	GROUP BY g.name;
 -- • Create text like "<Artist_Name> best rated album is <Name_of_album>”
 CREATE OR REPLACE FUNCTION artist_name_plus_name_of_album()
 RETURNS TABLE(
  full_sentance TEXT
-) AS
-$$
-BEGIN
-RETURN QUERY
- SELECT CONCAT(ar.name,' best rated album ', MAX(al.rating)) FROM artist ar
- LEFT JOIN song s ON ar.id = s.artist_id
- LEFT JOIN album al ON al.id = s.album_id
- GROUP BY ar.name;
-END;
+) AS $$
+ BEGIN
+	RETURN QUERY
+	SELECT CONCAT(ar.name,' best rated album ', MAX(al.rating)) FROM artist ar
+	LEFT JOIN song s ON ar.id = s.artist_id
+	LEFT JOIN album al ON al.id = s.album_id
+	GROUP BY ar.name;
+ END;
 $$ LANGUAGE PLPGSQL;
 
-DROP FUNCTION artist_name_plus_name_of_album();
+--DROP FUNCTION artist_name_plus_name_of_album(); za ne daj boze :)
 SELECT artist_name_plus_name_of_album();
 -- • Create a temp table with playlist that has songs which are in albums which are good rated (4.5+ rating)
 CREATE TEMP TABLE temp_playlist_songs_albums_good_rated AS
@@ -52,3 +51,34 @@ $$ LANGUAGE PLPGSQL;
 
 SELECT * FROM get_all_artist_with_all_there_genres();
 -- • Create a function that will provide: Number of songs per album, number of songs per playlist, number of songs per genre
+CREATE OR REPLACE FUNCTION get_all_number_of_songs_albums_playlist_per_something()
+RETURNS INTERVAL
+AS $$
+DECLARE
+	songs_per_album INT;
+	songs_per_playlist INT;
+	songs_per_genres INT;
+BEGIN
+	SELECT al.name, COUNT(s.id) as songs_per_album FROM song s
+	JOIN album al ON al.id = s.album_id
+	GROUP BY al.name;
+	
+	SELECT pl.title, COUNT(s.id) as songs_per_playlist FROM song s
+	LEFT JOIN playlists_songs ps ON s.id = ps.song_id
+	JOIN playlist pl ON pl.id = ps.playlist_id
+	GROUP BY pl.title;
+	
+	SELECT g.name, COUNT(s.id) as songs_per_genres FROM song s
+	LEFT JOIN songs_genres sg ON s.id = sg.song_id
+	JOIN genre g ON g.id = sg.genre_id
+	GROUP BY g.name;
+	
+	RETURN songs_per_genres,songs_per_playlist,songs_per_album;
+END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT * FROM get_all_number_of_songs_albums_playlist_per_something();
+--MI GO DAVA OVOJ ERROR "ERROR:  query has no destination for result data
+--HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+--CONTEXT:  PL/pgSQL function get_all_number_of_songs_albums_playlist_per_something() line 7 at SQL statement "
+-- DROP FUNCTION get_all_number_of_songs_albums_playlist_per_something();
