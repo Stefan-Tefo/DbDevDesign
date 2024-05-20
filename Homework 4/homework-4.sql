@@ -73,7 +73,7 @@ BEGIN
 	JOIN genre g ON g.id = sg.genre_id
 	GROUP BY g.name;
 	
-	RETURN songs_per_genres,songs_per_playlist,songs_per_album;
+	RETURN songs_per_genres, songs_per_playlist, songs_per_album;
 END;
 $$ LANGUAGE PLPGSQL;
 
@@ -81,4 +81,4 @@ SELECT * FROM get_all_number_of_songs_albums_playlist_per_something();
 --MI GO DAVA OVOJ ERROR "ERROR:  query has no destination for result data
 --HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
 --CONTEXT:  PL/pgSQL function get_all_number_of_songs_albums_playlist_per_something() line 7 at SQL statement "
--- DROP FUNCTION get_all_number_of_songs_albums_playlist_per_something();
+DROP FUNCTION get_all_number_of_songs_albums_playlist_per_something();
