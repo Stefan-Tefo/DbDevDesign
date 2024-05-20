@@ -33,6 +33,19 @@ LEFT JOIN song s ON ar.id = s.artist_id
 GROUP BY ar.name,s.name
 HAVING SUM(s.duration)>AVG(s.duration);
 -- • Create a new view (vw_ArtistSongCounts) that will list all artist IDs and count of songs per artist
+CREATE VIEW vw_artist_song_counts_with_song_id AS
+SELECT ar.id , COUNT(s.id) as song_per_arrtist FROM artist ar
+LEFT JOIN song s ON ar.id = s.artist_id
+GROUP BY ar.id;
 -- • Change the view to show artist names instead of artist ID
+CREATE VIEW vw_artist_song_counts_with_song_name AS
+SELECT ar.id , COUNT(s.id) as song_per_arrtist FROM artist ar
+LEFT JOIN song s ON ar.id = s.artist_id
+GROUP BY ar.id;
 -- • List all rows from the view ordered by the biggest song count
+CREATE VIEW vw_artist_song_counts_with_order AS
+SELECT ar.name , COUNT(s.id) as song_per_arrtist FROM artist ar
+LEFT JOIN song s ON ar.id = s.artist_id
+GROUP BY ar.id
+ORDER BY COUNT(s.name) DESC
 -- • Create a new view (vw_ArtistAlbumDetails) that will list all artists (name) and count the albums they have
