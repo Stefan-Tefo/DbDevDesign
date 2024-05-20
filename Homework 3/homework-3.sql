@@ -47,5 +47,10 @@ CREATE VIEW vw_artist_song_counts_with_order AS
 SELECT ar.name , COUNT(s.id) as song_per_arrtist FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
 GROUP BY ar.id
-ORDER BY COUNT(s.name) DESC
+ORDER BY COUNT(s.name) DESC;
 -- • Create a new view (vw_ArtistAlbumDetails) that will list all artists (name) and count the albums they have
+CREATE VIEW vw_artist_album_details AS
+SELECT ar.name,  COUNT(al.name) as count_album_per_user FROM artist ar
+LEFT JOIN song s ON ar.id = s.artist_id
+LEFT JOIN album al ON al.id = s.album_id
+GROUP BY ar.name;
