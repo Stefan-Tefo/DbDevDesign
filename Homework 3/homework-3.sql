@@ -8,8 +8,9 @@ GROUP BY ar.name;
 SELECT al.name album_name, COUNT(s.id) as song_per_arrtist FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
 LEFT JOIN album al ON al.id = s.album_id
+WHERE al.id < 10
 GROUP BY al.name
-HAVING COUNT(al.id) < 100;
+-- HAVING COUNT(al.id) < 100; ova mi e vo razmisluvanje
 -- • Find the maximal duration and the average duration per song for each artist
 SELECT ar.name as artist_name, SUM(s.duration), s.name as song_name ,AVG(s.duration) FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
@@ -23,8 +24,9 @@ HAVING COUNT(s.id)>10;
 SELECT al.name album_name, COUNT(s.id) as song_per_arrtist FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
 LEFT JOIN album al ON al.id = s.album_id
-GROUP BY al.name;
-HAVING COUNT(al.id) < 100 AND COUNT(s.id)>10;
+WHERE al.id < 100
+GROUP BY al.name
+HAVING COUNT(s.id)>10;
 -- • Find the song count, maximal duration, and the average duration per artist on all songs in the system. Filter only records where maximal duration is more than the average duration
 SELECT ar.name as artist_name,COUNT(s.id) as song_per_arrtist ,SUM(s.duration), s.name as song_name ,AVG(s.duration) FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
