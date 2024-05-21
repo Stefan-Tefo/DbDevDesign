@@ -46,22 +46,30 @@ SELECT * FROM return_all_rock_songs_by_artist_with_details(1, 'Rock');
 DROP FUNCTION return_all_rock_songs_by_artist_with_details(integer,character varying);
 -- • Create a function that returns the quantity of songs for a given album ID, only if the quantity is bigger than 5. If it is not, raise a notice. Use the if/else statement.
 CREATE OR REPLACE FUNCTION return_quantity_of_songs_by_album(v_album_id INT)
-RETURNS INTERVAL
+RETURNS INT
 AS $$
 DECLARE 
-		quantity_of_songs INTERVAL;
+		quantity_of_songs INT;
  BEGIN
-	SELECT al.name, COUNT(s.id) INTO quantity_of_songs FROM album al 
+	SELECT  COUNT(s.id) INTO quantity_of_songs FROM album al 
 	LEFT JOIN song s ON al.id = s.album_id
-	WHERE COUNT(s.id) >= 5 AND al.id = v_album_id
-	GROUP BY al.name;
-	
+	WHERE al.id = v_album_id
+	HAVING COUNT(s.id) >= 8;
 	IF  NOT  FOUND THEN
-	RAISE NOTICE 'The album do not contain 5 songs or more'
--- 	,v_album_id
+	RAISE NOTICE 'Less songs in album';
 	END IF;
+	
+	RETURN quantity_of_songs;
  END;
 $$ LANGUAGE PLPGSQL;
+
+--id=22 ima poveke od 5 pesni
+SELECT * FROM return_quantity_of_songs_by_album(5);
+DROP FUNCTION return_quantity_of_songs_by_album(integer);
+--Ova dole e samo za proverka 
+SELECT COUNT(s.name), al.name,al.id FROM album al
+LEFT JOIN song s ON al.id = s.album_id
+GROUP BY al.name,al.id
 -- • Create a function that returns all artists that sang a song from a playlist with a certain id.
 CREATE OR REPLACE FUNCTION return_all_song_sang_within_playlist(v_artist_id INT)
 RETURNS TABLE(
