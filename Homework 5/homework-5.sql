@@ -47,12 +47,12 @@ DROP FUNCTION return_all_rock_songs_by_artist_with_details(integer,character var
 -- • Create a function that returns the quantity of songs for a given album ID, only if the quantity is bigger than 5. If it is not, raise a notice. Use the if/else statement.
 	CREATE OR REPLACE FUNCTION return_quantity_of_songs_by_album(v_album_id INT)
 	RETURN TABLE ( ) AS $$
-BEGIN
+ BEGIN
 	SELECT al.name, COUNT(s.id) as count_of_song FROM album al 
 	LEFT JOIN song s ON al.id = s.album_id
 	GROUP BY al.name
 	HAVING COUNT(s.id) > 5
-END;
+ END;
 $$ LANGUAGE PLPGSQL;
 -- • Create a function that returns all artists that sang a song from a playlist with a certain id.
 CREATE OR REPLACE FUNCTION return_all_song_sang_within_playlist(v_artist_id INT)
