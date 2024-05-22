@@ -18,7 +18,7 @@ $$ LANGUAGE PLPGSQL;
 
 SELECT * FROM get_all_info_from_artist('Eminem') --OVA E BEZ ROW smth
 -- • Create a function doing the same thing as above but using a record.
---NE GO RABIRAM BARANJETO
+--NE GO RABIRAM BARANJETO (DA SE POKAZE NAREDEN CAS)
 -- • Create a function that will return all rock songs, determined by the artist id, with all of the artist details.
 CREATE OR REPLACE FUNCTION return_all_rock_songs_by_artist_with_details(v_artist_id INT, genre_name VARCHAR)
 RETURNS TABLE(
@@ -55,7 +55,7 @@ DECLARE
 	LEFT JOIN song s ON al.id = s.album_id
 	WHERE al.id = v_album_id
 	HAVING COUNT(s.id) >= 8;
-	IF  NOT  FOUND THEN
+	IF  quantity_of_songs > 10 THEN
 	RAISE NOTICE 'Less songs in album';
 	END IF;
 	
@@ -64,7 +64,7 @@ DECLARE
 $$ LANGUAGE PLPGSQL;
 
 --id=22 ima poveke od 5 pesni
-SELECT * FROM return_quantity_of_songs_by_album(5);
+SELECT * FROM return_quantity_of_songs_by_album(40);
 DROP FUNCTION return_quantity_of_songs_by_album(integer);
 --Ova dole e samo za proverka 
 SELECT COUNT(s.name), al.name,al.id FROM album al
