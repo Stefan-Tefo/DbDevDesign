@@ -39,9 +39,9 @@ LEFT JOIN song s ON ar.id = s.artist_id
 GROUP BY ar.id;
 -- • Change the view to show artist names instead of artist ID
 CREATE VIEW vw_artist_song_counts_with_song_name AS
-SELECT ar.id , COUNT(s.id) as song_per_arrtist FROM artist ar
+SELECT ar.name , COUNT(s.id) as song_per_arrtist FROM artist ar
 LEFT JOIN song s ON ar.id = s.artist_id
-GROUP BY ar.id;
+GROUP BY ar.name;
 -- • List all rows from the view ordered by the biggest song count
 CREATE VIEW vw_artist_song_counts_with_order AS
 SELECT ar.name , COUNT(s.id) as song_per_arrtist FROM artist ar
