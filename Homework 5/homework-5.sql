@@ -65,13 +65,9 @@ DECLARE
 	
  END;
 $$ LANGUAGE PLPGSQL;
-
-SELECT * FROM return_quantity_of_songs_by_album(22);
+--id: 22=9 ,id: 4=11
+SELECT * FROM return_quantity_of_songs_by_album(4);
 DROP FUNCTION return_quantity_of_songs_by_album(integer);
---Ova dole e samo za proverka na vrednosi
-SELECT COUNT(s.name), al.name,al.id FROM album al
-LEFT JOIN song s ON al.id = s.album_id
-GROUP BY al.name,al.id
 -- • Create a function that returns all artists that sang a song from a playlist with a certain id.
 CREATE OR REPLACE FUNCTION return_all_song_sang_within_playlist(v_artist_id INT)
 RETURNS TABLE(
