@@ -1,0 +1,1 @@
+-- • Create a stored procedure, called add_song_to_album, which, when called, will insert a new song into the song table, associate it with an album, and optionally insert lyrics.
