@@ -53,20 +53,19 @@ DECLARE
  BEGIN
 	SELECT  COUNT(s.id) INTO quantity_of_songs FROM album al 
 	LEFT JOIN song s ON al.id = s.album_id
-	WHERE al.id = v_album_id
-	HAVING COUNT(s.id) >= 8;
-	IF  quantity_of_songs > 10 THEN
-	RAISE NOTICE 'Less songs in album';
+	WHERE al.id = v_album_id;
+	
+	IF quantity_of_songs > 10 THEN
+	RAISE ;
 	END IF;
 	
 	RETURN quantity_of_songs;
  END;
 $$ LANGUAGE PLPGSQL;
 
---id=22 ima poveke od 5 pesni
-SELECT * FROM return_quantity_of_songs_by_album(40);
+SELECT * FROM return_quantity_of_songs_by_album(22);
 DROP FUNCTION return_quantity_of_songs_by_album(integer);
---Ova dole e samo za proverka 
+--Ova dole e samo za proverka na vrednosi
 SELECT COUNT(s.name), al.name,al.id FROM album al
 LEFT JOIN song s ON al.id = s.album_id
 GROUP BY al.name,al.id
