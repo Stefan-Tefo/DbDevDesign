@@ -54,12 +54,13 @@ DECLARE
 	SELECT  COUNT(s.id) INTO quantity_of_songs FROM album al 
 	LEFT JOIN song s ON al.id = s.album_id
 	WHERE al.id = v_album_id;
-	
+	--PORADI PROVERKA OVDE E 10
 	IF quantity_of_songs > 10 THEN
-	RAISE ;
+	RAISE NOTICE 'Less songs then 5' ;
+	ELSE
+		RETURN quantity_of_songs;
 	END IF;
 	
-	RETURN quantity_of_songs;
  END;
 $$ LANGUAGE PLPGSQL;
 
