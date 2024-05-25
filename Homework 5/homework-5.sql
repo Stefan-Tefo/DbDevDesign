@@ -53,20 +53,18 @@ DECLARE
  BEGIN
 	SELECT  COUNT(s.id) INTO quantity_of_songs FROM album al 
 	LEFT JOIN song s ON al.id = s.album_id
-	WHERE al.id = v_album_id
-	HAVING COUNT(s.id)>10;
-	-- PORADI PROVERKA OVDE E 10 I GO OSTAVIV VAKA AKO IMA POMALCE OD 10 VRAKA NULL
-	-- AKO E TOCNO KE GI TRGNAM IFOVITE AKO NE NAJDAM RESENIJE
--- 	IF quantity_of_songs > 10 THEN
--- 	RAISE NOTICE 'Less songs then 5' ;
--- 	ELSE
+	WHERE al.id = v_album_id;
+-- 	HAVING COUNT(s.id)>5;
+	IF quantity_of_songs >= 5 THEN
 		RETURN quantity_of_songs;
--- 	END IF;
+	ELSE
+		RAISE NOTICE 'The album has less or equal to 5 songs';
+	END IF;
 	
  END;
 $$ LANGUAGE PLPGSQL;
 --id: 22=9 ,id: 4=11
-SELECT * FROM return_quantity_of_songs_by_album(4);
+SELECT * FROM return_quantity_of_songs_by_album(22);
 DROP FUNCTION return_quantity_of_songs_by_album(integer);
 -- • Create a function that returns all artists that sang a song from a playlist with a certain id.
 CREATE OR REPLACE FUNCTION return_all_song_sang_within_playlist(v_artist_id INT)

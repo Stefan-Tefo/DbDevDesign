@@ -52,38 +52,47 @@ $$ LANGUAGE PLPGSQL;
 SELECT * FROM get_all_artist_with_all_there_genres();
 -- • Create a function that will provide: Number of songs per album, number of songs per playlist, number of songs per genre
 CREATE OR REPLACE FUNCTION get_all_number_of_songs_albums_playlist_per_something()
-RETURNS INT
+RETURNS TABLE( 
+	album_name VARCHAR,
+	songs_per_album INT,
+	playlist_title VARCHAR,
+	songs_per_playlist INT,
+	genre_name VARCHAR,
+	songs_per_genres INT
+)
 AS $$
-DECLARE
-	songs_per_album INT;
-	songs_per_playlist INT;
-	songs_per_genres INT;
+-- DECLARE
+-- 	songs_per_album INT;
+-- 	songs_per_playlist INT;
+-- 	songs_per_genres INT;
 BEGIN
-	SELECT al.name, COUNT(s.id) INTO songs_per_album FROM song s
-	JOIN album al ON al.id = s.album_id
-	GROUP BY al.name;
+	-- SELECT al.name, COUNT(s.id) INTO songs_per_album FROM song s
+	-- JOIN album al ON al.id = s.album_id
+	-- GROUP BY al.name;
 	
-	SELECT pl.title, COUNT(s.id) INTO songs_per_playlist FROM song s
-	LEFT JOIN playlists_songs ps ON s.id = ps.song_id
-	JOIN playlist pl ON pl.id = ps.playlist_id
-	GROUP BY pl.title;
+	-- SELECT pl.title, COUNT(s.id) INTO songs_per_playlist FROM song s
+	-- LEFT JOIN playlists_songs ps ON s.id = ps.song_id
+	-- JOIN playlist pl ON pl.id = ps.playlist_id
+	-- GROUP BY pl.title;
 	
-	SELECT g.name, COUNT(s.id) INTO songs_per_genres FROM song s
-	LEFT JOIN songs_genres sg ON s.id = sg.song_id
-	JOIN genre g ON g.id = sg.genre_id
-	GROUP BY g.name;
+	-- SELECT g.name, COUNT(s.id) INTO songs_per_genres FROM song s
+	-- LEFT JOIN songs_genres sg ON s.id = sg.song_id
+	-- JOIN genre g ON g.id = sg.genre_id
+	-- GROUP BY g.name;
 	
 	-- OVA MI E VTORA IDEA NO VRAKA SEGDE VREDNOSI OD 1 :) ILI TREBA POSEBNI TRI FUNKCII
--- 	SELECT al.name, COUNT(s.id) as songs_per_album,pl.title, COUNT(s.id) as songs_per_playlist, g.name, COUNT(s.id) as songs_per_genres  FROM album al
--- 	JOIN song s ON al.id = s.album_id
--- 	LEFT JOIN playlists_songs ps ON s.id = ps.song_id
--- 	JOIN playlist pl ON pl.id = ps.playlist_id
--- 	LEFT JOIN songs_genres sg ON s.id = sg.song_id
--- 	JOIN genre g ON g.id = sg.genre_id
--- 	GROUP BY al.name,pl.title ,g.name;
+	RETURN QUERY
+	SELECT al.name as album_name, COUNT(DISTINCT s.id)::INT as songs_per_album,pl.title as playlist_title, COUNT(DISTINCT ps.song_id)::INT as songs_per_playlist, g.name as genre_name, COUNT(DISTINCT sg.song_id)::INT as songs_per_genres 
+	FROM album al
+	JOIN song s ON al.id = s.album_id
+	LEFT JOIN playlists_songs ps ON s.id = ps.song_id
+	JOIN playlist pl ON pl.id = ps.playlist_id
+	LEFT JOIN songs_genres sg ON s.id = sg.song_id
+	JOIN genre g ON g.id = sg.genre_id
+	GROUP BY al.name,pl.title ,g.name;
 
 	
-	RETURN songs_per_genres, songs_per_playlist, songs_per_album;
+-- 	RETURN songs_per_genres, songs_per_playlist, songs_per_album;
 END;
 $$ LANGUAGE PLPGSQL;
 
