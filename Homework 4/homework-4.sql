@@ -61,42 +61,20 @@ RETURNS TABLE(
 	songs_per_genres INT
 )
 AS $$
--- DECLARE
--- 	songs_per_album INT;
--- 	songs_per_playlist INT;
--- 	songs_per_genres INT;
 BEGIN
-	-- SELECT al.name, COUNT(s.id) INTO songs_per_album FROM song s
-	-- JOIN album al ON al.id = s.album_id
-	-- GROUP BY al.name;
-	
-	-- SELECT pl.title, COUNT(s.id) INTO songs_per_playlist FROM song s
-	-- LEFT JOIN playlists_songs ps ON s.id = ps.song_id
-	-- JOIN playlist pl ON pl.id = ps.playlist_id
-	-- GROUP BY pl.title;
-	
-	-- SELECT g.name, COUNT(s.id) INTO songs_per_genres FROM song s
-	-- LEFT JOIN songs_genres sg ON s.id = sg.song_id
-	-- JOIN genre g ON g.id = sg.genre_id
-	-- GROUP BY g.name;
-	
-	-- OVA MI E VTORA IDEA NO VRAKA SEGDE VREDNOSI OD 1 :) ILI TREBA POSEBNI TRI FUNKCII
+
 	RETURN QUERY
-	SELECT al.name as album_name, COUNT(DISTINCT s.id)::INT as songs_per_album,pl.title as playlist_title, COUNT(DISTINCT ps.song_id)::INT as songs_per_playlist, g.name as genre_name, COUNT(DISTINCT sg.song_id)::INT as songs_per_genres 
+	SELECT al.name as album_name, COUNT(s.id)::INT as songs_per_album,pl.title as playlist_title, COUNT(ps.song_id)::INT as songs_per_playlist, g.name as genre_name, COUNT(sg.song_id)::INT as songs_per_genres 
 	FROM album al
-	JOIN song s ON al.id = s.album_id
+    LEFT JOIN song s ON al.id = s.album_id
 	LEFT JOIN playlists_songs ps ON s.id = ps.song_id
-	JOIN playlist pl ON pl.id = ps.playlist_id
+	LEFT JOIN playlist pl ON pl.id = ps.playlist_id
 	LEFT JOIN songs_genres sg ON s.id = sg.song_id
-	JOIN genre g ON g.id = sg.genre_id
+	LEFT JOIN genre g ON g.id = sg.genre_id
 	GROUP BY al.name,pl.title ,g.name;
 
-	
--- 	RETURN songs_per_genres, songs_per_playlist, songs_per_album;
 END;
 $$ LANGUAGE PLPGSQL;
 
 SELECT * FROM get_all_number_of_songs_albums_playlist_per_something();
--- MI GO DAVA OVOJ ERROR:  invalid input syntax for type integer: "Cloud Nine"
--- CONTEXT:  PL/pgSQL function get_all_number_of_songs_albums_playlist_per_something() line 7 at SQL statement 
 DROP FUNCTION get_all_number_of_songs_albums_playlist_per_something();
