@@ -43,3 +43,26 @@
 -- Detail: Key (id)=(13) already exists.
 -- Context: SQL statement "INSERT INTO album(name) VALUES (s_name) RETURNING id"
 -- PL/pgSQL function add_song_to_album(character varying,character varying,character varying,interval,boolean) line 7 at SQL statement
+
+-- PRI SPAM NA CALL GO DOBIV I OVOJ ERROR
+-- ERROR:  INSERT has more expressions than target columns
+-- LINE 13:  v_album_id,
+--           ^
+-- QUERY:  INSERT INTO song(
+-- 	name,
+--     duration,
+--     explicit ,
+-- 	album_id,
+-- 	artist_id
+-- 	) VALUES(
+-- 		s_name,
+-- 		a_name,
+-- 	p_name,
+--     p_duration,
+--     p_explicit,
+-- 	v_album_id,
+-- 	v_artist_id
+-- 	)
+-- CONTEXT:  PL/pgSQL function add_song_to_album(character varying,character varying,character varying,interval,boolean) line 9 at SQL statement 
+
+-- SQL state: 42601
