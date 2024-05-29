@@ -1,7 +1,7 @@
 -- • Create a stored procedure, called add_song_to_album, which, when called, will insert a new song into the song table, associate it with an album, and optionally insert lyrics.
  CREATE OR REPLACE PROCEDURE add_song_to_album(
 	a_name VARCHAR,
-	s_name VARCHAR,
+	b_name VARCHAR,
  	p_name VARCHAR,
     p_duration INTERVAL,
     p_explicit BOOLEAN
@@ -11,7 +11,7 @@
     v_album_id INT;
  BEGIN
 	INSERT INTO artist(name) VALUES (a_name) RETURNING id INTO v_artist_id;
-	INSERT INTO album(name) VALUES (s_name) RETURNING id INTO v_album_id;
+	INSERT INTO album(name) VALUES (b_name) RETURNING id INTO v_album_id;
 	
 	INSERT INTO song(
 	name,
@@ -20,6 +20,8 @@
 	album_id,
 	artist_id
 	) VALUES(
+-- 	b_name,
+-- 	a_name,
 	p_name,
     p_duration,
     p_explicit,
@@ -32,7 +34,7 @@
  END;
  $$;
  
- CALL add_song_to_album('Eminem','testtest','Nekoja Pesna', '00:02:00',true)
+ CALL add_song_to_album('Nekoj artist'::VARCHAR,'Nekoja album'::VARCHAR,'Nekoja Pesna'::VARCHAR, '00:02:00'::INTERVAL,true);
  
 --ERROR:  Key (id)=(13) already exists.duplicate key value violates unique constraint "album_pkey" 
 
